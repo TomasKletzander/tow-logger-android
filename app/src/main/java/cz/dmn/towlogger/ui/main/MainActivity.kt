@@ -2,11 +2,12 @@ package cz.dmn.towlogger.ui.main
 
 import android.app.Activity
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableBoolean
 import android.os.Bundle
-import android.view.View
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import cz.dmn.towlogger.R
-import cz.dmn.towlogger.core.LocationMonitor
+import cz.dmn.towlogger.core.LogService
 import cz.dmn.towlogger.core.LogServiceConnector
 import cz.dmn.towlogger.databinding.ActivityMainBinding
 import cz.dmn.towlogger.ui.BaseActivity
@@ -25,45 +26,54 @@ class MainActivity : BaseActivity() {
     }
 
     @Inject lateinit var logServiceConnector: LogServiceConnector
-    @Inject lateinit var locationMonitor: LocationMonitor
     lateinit var disposable : Disposable
     lateinit var binding: ActivityMainBinding
-    var locationDisposable: Disposable? = null
+    var logServiceController: LogService.Controller? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.isRunning = ObservableBoolean(false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        MenuInflater(this).inflate(R.menu.main_activity, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        logServiceController?.isRunning?.subscribe { isRunning ->
+            menu.findItem(R.id.actionStart).setVisible(!isRunning)
+            menu.findItem(R.id.actionStop).setVisible(isRunning)
+        }?.dispose()
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (super.onOptionsItemSelected(item)) return true
+        when (item.itemId) {
+            R.id.actionStart -> logServiceController?.start()
+            R.id.actionStop -> logServiceController?.stop()
+        }
+        return true
     }
 
     override fun onStart() {
         super.onStart()
         logServiceConnector.attach().subscribe { controller ->
-            binding.toggleListener = View.OnClickListener {
-                if (binding.isRunning!!.get()) {
-                    controller.stop()
-                } else {
-                    controller.start()
-                }
-            }
+            logServiceController = controller
+            invalidateOptionsMenu()
             disposable = logServiceConnector.runningObservable.subscribe { running ->
-                binding.isRunning!!.set(running)
+                invalidateOptionsMenu()
             }
-        }
-        locationDisposable = locationMonitor.observe().subscribe { location ->
-            binding.latitude = location.latitude.toString()
-            binding.longitude = location.longitude.toString()
-            binding.executePendingBindings()
-        }
-        binding.stopListener = View.OnClickListener {
-            locationDisposable?.dispose()
         }
     }
 
     override fun onStop() {
         super.onStop()
+        logServiceController = null
         logServiceConnector.detach()
         disposable.dispose()
-        locationDisposable?.dispose()
     }
 }

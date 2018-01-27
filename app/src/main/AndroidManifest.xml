@@ -1,11 +1,33 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.dmn.towlogger">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
+        android:name=".TowLoggerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" />
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ui.main.MainActivity">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name=".core.LogService"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="269380dbc21494c053f8cb3fb3370cd395bd4f82" />
+    </application>
 </manifest>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="isRunning" type="android.databinding.ObservableBoolean"/>
+        <variable name="toggleListener" type="android.view.View.OnClickListener"/>
+        <variable name="latitude" type="String"/>
+        <variable name="longitude" type="String"/>
+        <variable name="stopListener" type="android.view.View.OnClickListener"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{isRunning ? &quot;Running&quot; : &quot;Stopped&quot;}"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toggle"
+            android:onClickListener="@{toggleListener}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{latitude}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{longitude}"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop updates"
+            android:onClickListener="@{stopListener}"/>
+
+    </LinearLayout>
+
+</layout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tow Logger</string>
+    <string name="notification_monitoring_title">@string/app_name</string>
+    <string name="notification_monitoring_text">Tow monitoring active</string>
 </resources>

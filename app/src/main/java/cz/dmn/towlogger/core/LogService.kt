@@ -49,7 +49,7 @@ class LogService : Service() {
     @Inject lateinit var locationMonitor: LocationMonitor
     @Inject lateinit var igcLogger: IgcLogger
     @Inject lateinit var towDatabase: TowDatabase
-    private val monitoringDisposables = CompositeDisposable()
+    private val monitoringDisposables = mutableListOf<Disposable>()
 
     override fun onBind(p0: Intent?): IBinder = Controller()
 
@@ -90,7 +90,8 @@ class LogService : Service() {
     private fun cleanupMonitoring() {
         stopForeground(true)
         stopSelf()
-        monitoringDisposables.dispose()
+        monitoringDisposables.forEach { it.dispose() }
+        monitoringDisposables.clear()
         this@LogService.isRunningSubject.onNext(false)
         wakeLock.release()
     }

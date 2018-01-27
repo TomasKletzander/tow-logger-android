@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/actionStart"
+        android:title="@string/actionStart"
+        android:icon="@drawable/crosshairs"
+        android:showAsAction="always"/>
+
+    <item
+        android:id="@+id/actionStop"
+        android:title="@string/actionStop"
+        android:icon="@drawable/crosshairs_gps"
+        android:showAsAction="always"/>
+
+</menu>

@@ -8,4 +8,7 @@
     <color name="idle">#ff999999</color>
     <color name="active">#ff77bb77</color>
 
+    <color name="progressBg">#cc000000</color>
+    <color name="titleSeparator">#55ffffff</color>
+
 </resources>

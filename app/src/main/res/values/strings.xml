@@ -12,4 +12,10 @@
     <string name="labelPayer">Payer:</string>
     <string name="labelGlider">Glider:</string>
     <string name="notSet">Not set</string>
+    <string name="titleError">Ooops</string>
+    <string name="ok">OK</string>
+    <string name="errorLoadingPilotsData">Failed to get list of pilots. Please try again later.</string>
+    <string name="titlePickPilot">Pick pilot</string>
+    <string name="titlePickTowPilot">Pick tow pilot</string>
+    <string name="titlePickGldPilot">Pick glider pilot</string>
 </resources>

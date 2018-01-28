@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.pickpilot.PickPilotActivity"/>
+
         <service android:name=".core.LogService"/>
 
         <meta-data

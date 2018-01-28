@@ -1,6 +1,7 @@
 package cz.dmn.towlogger.ui.main
 
 import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.Menu
@@ -9,24 +10,29 @@ import android.view.MenuItem
 import cz.dmn.towlogger.R
 import cz.dmn.towlogger.core.LogService
 import cz.dmn.towlogger.core.LogServiceConnector
+import cz.dmn.towlogger.core.TowAttributes
 import cz.dmn.towlogger.databinding.ActivityMainBinding
 import cz.dmn.towlogger.ui.BaseActivity
-import dagger.Binds
+import cz.dmn.towlogger.ui.Navigator
+import cz.dmn.towlogger.ui.pickpilot.PickPilotActivity
 import dagger.Module
+import dagger.Provides
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
     @Module
-    abstract class InjectModule {
-
-        @Binds
-        abstract fun provideActivity(activity: MainActivity): Activity
+    class InjectModule {
+        
+        @Provides
+        fun provideActivity(activity: MainActivity): Activity = activity
     }
 
     @Inject lateinit var logServiceConnector: LogServiceConnector
     @Inject lateinit var model: MainActivityModel
+    @Inject lateinit var navigator: Navigator
+    @Inject lateinit var towAttributes: TowAttributes
     var runningDisposable: Disposable? = null
     lateinit var binding: ActivityMainBinding
     var logServiceController: LogService.Controller? = null
@@ -39,13 +45,13 @@ class MainActivity : BaseActivity() {
         model.updateFromTowAttributes()
         binding.model = model
         binding.setTowPilotClickListener {
-
+            navigator.pickTowPilot(towAttributes.towPilot)
         }
         binding.setGliderPilotClickListener {
-
+            navigator.pickGliderPilot(towAttributes.gliderPilot)
         }
         binding.setPayerClickListener {
-
+            navigator.pickPayer(towAttributes.payer)
         }
     }
 
@@ -98,5 +104,19 @@ class MainActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         model.dispose()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                Navigator.REQUEST_ID_PICK_TOW_PILOT -> towAttributes.towPilot = data?.getStringExtra(PickPilotActivity.EXTRA_PILOT_NAME) ?: ""
+                Navigator.REQUEST_ID_PICK_GLIDER_PILOT -> {
+                    towAttributes.gliderPilot = data?.getStringExtra(PickPilotActivity.EXTRA_PILOT_NAME) ?: ""
+                    towAttributes.payer = towAttributes.gliderPilot
+                }
+                Navigator.REQUEST_ID_PICK_PAYER -> towAttributes.payer = data?.getStringExtra(PickPilotActivity.EXTRA_PILOT_NAME) ?: ""
+            }
+            model.updateFromTowAttributes()
+        }
     }
 }

@@ -13,7 +13,7 @@ import cz.dmn.towlogger.R
 import cz.dmn.towlogger.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class LogService : Service() {
     @Inject lateinit var locationMonitor: LocationMonitor
     @Inject lateinit var igcLogger: IgcLogger
     @Inject lateinit var towDatabase: TowDatabase
-    private val monitoringDisposables = mutableListOf<Disposable>()
+    private val monitoringDisposables = CompositeDisposable()
 
     override fun onBind(p0: Intent?): IBinder = Controller()
 
@@ -91,7 +91,6 @@ class LogService : Service() {
         stopForeground(true)
         stopSelf()
         towDetector.stop()
-        monitoringDisposables.forEach { it.dispose() }
         monitoringDisposables.clear()
         this@LogService.isRunningSubject.onNext(false)
         wakeLock.release()

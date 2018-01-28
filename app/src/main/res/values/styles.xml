@@ -1,11 +1,54 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Label" parent="Base.TextAppearance.AppCompat.Display2">
+
+    </style>
+
+    <style name="Value" parent="Base.TextAppearance.AppCompat.Display1">
+
+    </style>
+
+    <style name="State" parent="Base.TextAppearance.AppCompat.Display1">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="TitleRow">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+
+    <style name="TitleLabel" parent="Base.TextAppearance.AppCompat.Caption">
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="TitleValue" parent="Base.TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">30sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:background">?selectableItemBackground</item>
+    </style>
+
+    <style name="Duration" parent="Base.TextAppearance.AppCompat.Headline">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="Altitude" parent="Base.TextAppearance.AppCompat.Headline">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:padding">4dp</item>
     </style>
 
 </resources>

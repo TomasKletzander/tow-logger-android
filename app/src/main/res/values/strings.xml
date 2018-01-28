@@ -4,4 +4,12 @@
     <string name="notification_monitoring_text">Tow monitoring active</string>
     <string name="actionStart">Start monitoring</string>
     <string name="actionStop">Stop monitoring</string>
+    <string name="stateOff">Inactive</string>
+    <string name="stateIdle">Idle</string>
+    <string name="stateTowing">Tow in progress</string>
+    <string name="labelTowPilot">Tow pilot:</string>
+    <string name="labelPilot">Glider pilot:</string>
+    <string name="labelPayer">Payer:</string>
+    <string name="labelGlider">Glider:</string>
+    <string name="notSet">Not set</string>
 </resources>

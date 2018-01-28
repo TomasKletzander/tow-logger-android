@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "911e15e790046f244c44aef385bfd21d",
+    "identityHash": "ee6ecdab12d3a6e3ed1a5c1dfaf24d9b",
     "entities": [
       {
         "tableName": "tows",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `pilotName` TEXT NOT NULL, `payerName` TEXT NOT NULL, `flightDate` INTEGER NOT NULL, `takeoffTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `elevation` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `towPilot` TEXT NOT NULL, `gliderPilot` TEXT NOT NULL, `payer` TEXT NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `elevation` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,26 +15,32 @@
             "notNull": true
           },
           {
-            "fieldPath": "pilotName",
-            "columnName": "pilotName",
+            "fieldPath": "towPilot",
+            "columnName": "towPilot",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "payerName",
-            "columnName": "payerName",
+            "fieldPath": "gliderPilot",
+            "columnName": "gliderPilot",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "flightDate",
-            "columnName": "flightDate",
+            "fieldPath": "payer",
+            "columnName": "payer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "takeoffTime",
-            "columnName": "takeoffTime",
+            "fieldPath": "time",
+            "columnName": "time",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -63,7 +69,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"911e15e790046f244c44aef385bfd21d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ee6ecdab12d3a6e3ed1a5c1dfaf24d9b\")"
     ]
   }
 }

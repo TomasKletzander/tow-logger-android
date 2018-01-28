@@ -9,7 +9,6 @@ import android.os.IBinder
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
-import io.reactivex.subjects.ReplaySubject
 import javax.inject.Inject
 
 class LogServiceConnector @Inject constructor(private val activity: Activity) : ServiceConnection {

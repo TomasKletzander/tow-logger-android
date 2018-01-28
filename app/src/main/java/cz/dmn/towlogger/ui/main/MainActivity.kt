@@ -26,13 +26,27 @@ class MainActivity : BaseActivity() {
     }
 
     @Inject lateinit var logServiceConnector: LogServiceConnector
-    lateinit var disposable : Disposable
+    @Inject lateinit var model: MainActivityModel
+    var runningDisposable: Disposable? = null
     lateinit var binding: ActivityMainBinding
     var logServiceController: LogService.Controller? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setTitle(R.string.app_name)
+        model.updateFromTowAttributes()
+        binding.model = model
+        binding.setTowPilotClickListener {
+
+        }
+        binding.setGliderPilotClickListener {
+
+        }
+        binding.setPayerClickListener {
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,7 +68,10 @@ class MainActivity : BaseActivity() {
         if (super.onOptionsItemSelected(item)) return true
         when (item.itemId) {
             R.id.actionStart -> logServiceController?.start()
-            R.id.actionStop -> logServiceController?.stop()
+            R.id.actionStop -> {
+                logServiceController?.stop()
+                model.stateText.set(getString(R.string.stateOff))
+            }
         }
         return true
     }
@@ -64,7 +81,7 @@ class MainActivity : BaseActivity() {
         logServiceConnector.attach().subscribe { controller ->
             logServiceController = controller
             invalidateOptionsMenu()
-            disposable = logServiceConnector.runningObservable.subscribe { running ->
+            runningDisposable = logServiceConnector.runningObservable.subscribe { running ->
                 invalidateOptionsMenu()
             }
         }
@@ -74,6 +91,12 @@ class MainActivity : BaseActivity() {
         super.onStop()
         logServiceController = null
         logServiceConnector.detach()
-        disposable.dispose()
+        runningDisposable?.dispose()
+        runningDisposable = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        model.dispose()
     }
 }

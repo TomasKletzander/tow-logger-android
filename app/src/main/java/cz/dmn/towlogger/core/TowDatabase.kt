@@ -31,8 +31,8 @@ class TowDatabase @Inject constructor(application: Application) {
         @Insert(onConflict = OnConflictStrategy.FAIL)
         fun insertTowRecords(vararg records: TowRecord)
 
-        @Query("select * from tows where flightDate = :flightDate order by takeoffTime")
-        fun loadTowRecordsForDate(flightDate: Long): Array<TowRecord>
+        @Query("select * from tows where date = :date order by time")
+        fun loadTowRecordsForDate(date: Long): Array<TowRecord>
     }
 
     fun addRecord(towRecord: TowRecord) = database.dbInterface().insertTowRecords(towRecord)

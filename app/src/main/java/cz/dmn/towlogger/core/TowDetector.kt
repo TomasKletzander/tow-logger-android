@@ -4,9 +4,9 @@ import android.location.Location
 import cz.dmn.towlogger.data.TowProgress
 import cz.dmn.towlogger.data.db.TowRecord
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.disposables.Disposable
-import java.util.*
+import io.reactivex.subjects.BehaviorSubject
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,28 +19,24 @@ class TowDetector @Inject constructor(private val locationMonitor: LocationMonit
     private var towStartTime = 0L
     private var towMinAltitude = 0.0
     private var towMaxAltitude = 0.0
-    private val emitters = mutableListOf<ObservableEmitter<TowProgress>>()
+    private val progressSubject = BehaviorSubject.createDefault(TowProgress.createOff())
     private var locationDisposable: Disposable? = null
+    val progress: Observable<TowProgress>
+    get() = progressSubject
 
-    fun observe(): Observable<TowProgress> = Observable.create { emitter ->
-        if (emitters.isEmpty()) {
-            locationDisposable = locationMonitor.observe().subscribe {
-                handleLocation(it)
-            }
+    fun start() {
+        if (locationDisposable != null) return
+        progressSubject.onNext(TowProgress.createIdle())
+        locationDisposable = locationMonitor.observe().subscribe {
+            handleLocation(it)
         }
-        emitters.add(emitter)
-        emitter.setDisposable(object : Disposable {
-            override fun isDisposed() = emitters.isEmpty()
+    }
 
-            override fun dispose() {
-                emitters.remove(emitter)
-                if (emitters.isEmpty()) {
-                    locationDisposable?.dispose()
-                    locationDisposable = null
-                    towInProgress = false
-                }
-            }
-        })
+    fun stop() {
+        locationDisposable?.dispose()
+        locationDisposable = null
+        towInProgress = false
+        progressSubject.onNext(TowProgress.createOff())
     }
 
     private fun handleLocation(location: Location) {
@@ -63,14 +59,14 @@ class TowDetector @Inject constructor(private val locationMonitor: LocationMonit
                     currentDate.day
             val time = currentDate.hours * 100 +
                     currentDate.minutes
-            val towRecord = TowRecord(0, towAttributes.pilotName, towAttributes.payerName, date, time,
+            val towRecord = TowRecord(0, towAttributes.towPilot, towAttributes.gliderPilot, towAttributes.payer, date, time,
                     System.currentTimeMillis() - towStartTime, towMaxAltitude - towMinAltitude)
             towInProgress = false
-            publishTowProgress(TowProgress.createTowFinished(towRecord))
+            progressSubject.onNext(TowProgress.createTowFinished(towRecord))
         } else {
             towMinAltitude = Math.min(towMinAltitude, location.altitude)
             towMaxAltitude = Math.max(towMaxAltitude, location.altitude)
-            publishTowProgress(TowProgress.createTowing(System.currentTimeMillis() - towStartTime,
+            progressSubject.onNext(TowProgress.createTowing(System.currentTimeMillis() - towStartTime,
                     (towMaxAltitude - towMinAltitude).toInt()))
         }
     }
@@ -84,13 +80,9 @@ class TowDetector @Inject constructor(private val locationMonitor: LocationMonit
             towMinAltitude = location.altitude
             towMaxAltitude = location.altitude
             towInProgress = true
-            publishTowProgress(TowProgress.createTowing(0, 0))
+            progressSubject.onNext(TowProgress.createTowing(0, 0))
         } else {
-            publishTowProgress(TowProgress.createIdle())
+            progressSubject.onNext(TowProgress.createIdle())
         }
-    }
-
-    private fun publishTowProgress(towProgress: TowProgress) {
-        emitters.forEach { it.onNext(towProgress) }
     }
 }

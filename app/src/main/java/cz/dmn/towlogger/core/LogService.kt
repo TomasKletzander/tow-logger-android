@@ -13,7 +13,6 @@ import cz.dmn.towlogger.R
 import cz.dmn.towlogger.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
@@ -66,7 +65,8 @@ class LogService : Service() {
 
     private fun initializeMonitoring() {
         wakeLock.acquire()
-        monitoringDisposables.add(towDetector.observe().subscribe {
+        towDetector.start()
+        monitoringDisposables.add(towDetector.progress.subscribe {
 
             //  Save tow record to database
             it.record?.apply { towDatabase.addRecord(this) }
@@ -90,6 +90,7 @@ class LogService : Service() {
     private fun cleanupMonitoring() {
         stopForeground(true)
         stopSelf()
+        towDetector.stop()
         monitoringDisposables.forEach { it.dispose() }
         monitoringDisposables.clear()
         this@LogService.isRunningSubject.onNext(false)

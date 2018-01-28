@@ -1,16 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable name="model" type="cz.dmn.towlogger.ui.main.MainActivityModel"/>
+        <variable name="towPilotClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="gliderPilotClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="payerClickListener" type="android.view.View.OnClickListener"/>
+        <variable name="gliderClickListener" type="android.view.View.OnClickListener"/>
+        <import type="android.view.View"/>
     </data>
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-    </LinearLayout>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:elevation="6dp"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1">
+
+                    <TableRow style="@style/TitleRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labelTowPilot"
+                            style="@style/TitleLabel"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.towPilot}"
+                            android:onClickListener="@{towPilotClickListener}"
+                            tools:text="Pavel Schoř"
+                            style="@style/TitleValue"/>
+
+                    </TableRow>
+
+                    <TableRow style="@style/TitleRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labelPilot"
+                            style="@style/TitleLabel"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.gliderPilot}"
+                            android:onClickListener="@{gliderPilotClickListener}"
+                            tools:text="Tomáš Kletzander"
+                            style="@style/TitleValue"/>
+
+                    </TableRow>
+
+                    <TableRow style="@style/TitleRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labelPayer"
+                            style="@style/TitleLabel"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.payer}"
+                            android:onClickListener="@{payerClickListener}"
+                            tools:text="Tomáš Kletzander"
+                            style="@style/TitleValue"/>
+
+                    </TableRow>
+
+                    <TableRow style="@style/TitleRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/labelGlider"
+                            style="@style/TitleLabel"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.glider}"
+                            android:onClickListener="@{gliderClickListener}"
+                            tools:text="Tomáš Kletzander"
+                            style="@style/TitleValue"/>
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:background="@{model.progressBackground}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.stateText}"
+                    style="@style/State"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.duration}"
+                    android:visibility="@{model.towInfoVisible ? View.VISIBLE : View.GONE}"
+                    style="@style/Duration"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.altitude}"
+                    android:visibility="@{model.towInfoVisible ? View.VISIBLE : View.GONE}"
+                    style="@style/Altitude"/>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </layout>

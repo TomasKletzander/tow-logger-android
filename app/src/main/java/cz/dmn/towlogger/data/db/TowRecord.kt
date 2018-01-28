@@ -6,9 +6,10 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "tows")
 data class TowRecord(@PrimaryKey
                      @JvmField var id: Long,
-                     @JvmField var pilotName: String,
-                     @JvmField var payerName: String,
-                     @JvmField var flightDate: Int,
-                     @JvmField var takeoffTime: Int,
+                     @JvmField var towPilot: String,
+                     @JvmField var gliderPilot: String,
+                     @JvmField var payer: String,
+                     @JvmField var date: Int,
+                     @JvmField var time: Int,
                      @JvmField var duration: Long,
                      @JvmField var elevation: Double)

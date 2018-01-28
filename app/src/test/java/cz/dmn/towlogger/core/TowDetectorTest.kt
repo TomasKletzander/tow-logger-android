@@ -33,12 +33,16 @@ class TowDetectorTest {
     }
 
     @Test fun shouldDisposeLocationMonitorCorrectly() {
-        val observable = towDetector.observe()
+        val observable = towDetector.progress
         verifyNoMoreInteractions(locationMonitor)
         observable.subscribe(testObserver)
+        verifyNoMoreInteractions(locationMonitor)
+        towDetector.start()
         verify(locationMonitor).observe()
         verifyNoMoreInteractions(locationMonitor)
         testObserver.cancel()
+        verifyNoMoreInteractions(locationMonitor)
+        towDetector.stop()
         verify(locationDisposable).dispose()
     }
 }

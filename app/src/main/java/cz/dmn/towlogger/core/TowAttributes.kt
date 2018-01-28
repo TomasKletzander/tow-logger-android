@@ -24,27 +24,27 @@ class TowAttributes @Inject constructor(@Named("TowAttributes") private val pref
     get() = _towPilot
     set(value) {
         _towPilot = value
-        prefs.edit().putString(PREF_TOW_PILOT, _towPilot).apply()
+        prefs.edit().putString(PREF_TOW_PILOT, value).apply()
     }
 
     var gliderPilot: String
     get() = _gliderPilot
     set(value) {
         _gliderPilot = value
-        prefs.edit().putString(PREF_GLIDER_PILOT, _towPilot).apply()
+        prefs.edit().putString(PREF_GLIDER_PILOT, value).apply()
     }
 
     var payer: String
     get() = _payer
     set(value) {
         _payer = value
-        prefs.edit().putString(PREF_PAYER, _payer).apply()
+        prefs.edit().putString(PREF_PAYER, value).apply()
     }
 
     var glider: String
     get() = _glider
     set(value) {
         _glider = value
-        prefs.edit().putString(PREF_GLIDER, _glider).apply()
+        prefs.edit().putString(PREF_GLIDER, value).apply()
     }
 }
